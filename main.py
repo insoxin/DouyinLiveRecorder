@@ -189,6 +189,11 @@ def extract_live_url(text: str) -> str | None:
     return None
 
 
+def parse_config_line_live_url(text_line: str) -> str:
+    split_line = re.split('[,，]', text_line.strip().lstrip('#'))
+    return next((item.strip() for item in split_line if item.strip().startswith(('http://', 'https://'))), '')
+
+
 def append_live_url(url: str) -> str:
     with file_update_lock:
         if not os.path.isfile(url_config_file):
@@ -201,11 +206,7 @@ def append_live_url(url: str) -> str:
             text_line = line.strip().lstrip('#')
             if not text_line:
                 continue
-            split_line = re.split('[,，]', text_line)
-            live_url = next(
-                (item.strip() for item in split_line if item.strip().startswith(('http://', 'https://'))),
-                ''
-            )
+            live_url = parse_config_line_live_url(text_line)
             if live_url == url:
                 if line.strip().startswith('#'):
                     lines[i] = re.sub(r'^(\s*)#', r'\1', line, count=1)
@@ -221,9 +222,89 @@ def append_live_url(url: str) -> str:
         return f'✅ 新增成功: {url}'
 
 
+def list_live_urls() -> str:
+    with file_update_lock:
+        if not os.path.isfile(url_config_file):
+            return "📭 暂无录制链接"
+        with open(url_config_file, 'r', encoding=text_encoding, errors='ignore') as file:
+            lines = file.readlines()
+    enable_urls, disable_urls = [], []
+    for line in lines:
+        text_line = line.strip()
+        if not text_line:
+            continue
+        live_url = parse_config_line_live_url(text_line)
+        if not live_url:
+            continue
+        if text_line.startswith('#'):
+            disable_urls.append(live_url)
+        else:
+            enable_urls.append(live_url)
+    if not enable_urls and not disable_urls:
+        return "📭 暂无录制链接"
+    msg = [f"📋 录制链接（启用{len(enable_urls)} 停用{len(disable_urls)}）"]
+    if enable_urls:
+        msg.extend([f"✅ {url}" for url in enable_urls[:40]])
+    if disable_urls:
+        msg.extend([f"⏸ {url}" for url in disable_urls[:20]])
+    if len(enable_urls) > 40 or len(disable_urls) > 20:
+        msg.append("...（结果过长已截断）")
+    return '\n'.join(msg)
+
+
+def delete_live_url(url: str) -> str:
+    with file_update_lock:
+        if not os.path.isfile(url_config_file):
+            return "📭 暂无录制链接"
+        with open(url_config_file, 'r', encoding=text_encoding, errors='ignore') as file:
+            lines = file.readlines()
+        new_lines = []
+        deleted = False
+        for line in lines:
+            live_url = parse_config_line_live_url(line)
+            if live_url == url:
+                deleted = True
+                continue
+            new_lines.append(line)
+        if not deleted:
+            return f'❌ 未找到链接: {url}'
+        with open(url_config_file, 'w', encoding=text_encoding) as file:
+            file.writelines(new_lines)
+    return f'✅ 删除成功: {url}'
+
+
+def update_live_url(old_url: str, new_url: str) -> str:
+    with file_update_lock:
+        if not os.path.isfile(url_config_file):
+            return "📭 暂无录制链接"
+        with open(url_config_file, 'r', encoding=text_encoding, errors='ignore') as file:
+            lines = file.readlines()
+        for line in lines:
+            if parse_config_line_live_url(line) == new_url:
+                return f'ℹ️ 链接已存在: {new_url}'
+        updated = False
+        for i, line in enumerate(lines):
+            if parse_config_line_live_url(line) == old_url:
+                lines[i] = line.replace(old_url, new_url, 1)
+                updated = True
+                break
+        if not updated:
+            return f'❌ 未找到旧链接: {old_url}'
+        with open(url_config_file, 'w', encoding=text_encoding) as file:
+            file.writelines(lines)
+    return f'✅ 修改成功:\n{old_url}\n➡️ {new_url}'
+
+
 def telegram_manage_live_urls(token: str, chat_id: str):
     offset = 0
-    help_text = "发送 /add 直播间链接 来新增录制地址，例如：\n/add https://live.douyin.com/123456\n也支持直接发送直播间链接。"
+    help_text = (
+        "Telegram录制链接管理命令：\n"
+        "/add 链接 - 新增\n"
+        "/list - 查询\n"
+        "/del 链接 - 删除\n"
+        "/update 旧链接|新链接 - 修改\n"
+        "也支持直接发送直播间链接进行新增。"
+    )
     while True:
         try:
             api = f'https://api.telegram.org/bot{token}/getUpdates?timeout=20&offset={offset}'
@@ -244,6 +325,32 @@ def telegram_manage_live_urls(token: str, chat_id: str):
                 lower_text = text.lower()
                 if lower_text in {'/start', '/help'}:
                     tg_bot(chat_id, token, help_text)
+                    continue
+
+                if lower_text == '/list':
+                    tg_bot(chat_id, token, list_live_urls())
+                    continue
+
+                if lower_text.startswith('/del ') or lower_text.startswith('/delete '):
+                    target_url = extract_live_url(text.split(' ', maxsplit=1)[1])
+                    if target_url:
+                        tg_bot(chat_id, token, delete_live_url(target_url))
+                    else:
+                        tg_bot(chat_id, token, "❌ 未识别到有效链接，请使用 /del 链接")
+                    continue
+
+                if lower_text.startswith('/update '):
+                    update_text = text.split(' ', maxsplit=1)[1]
+                    old_and_new = update_text.split('|', maxsplit=1)
+                    if len(old_and_new) == 2:
+                        old_url = extract_live_url(old_and_new[0])
+                        new_url = extract_live_url(old_and_new[1])
+                        if old_url and new_url:
+                            tg_bot(chat_id, token, update_live_url(old_url, new_url))
+                        else:
+                            tg_bot(chat_id, token, "❌ 请提供有效旧链接和新链接")
+                    else:
+                        tg_bot(chat_id, token, "❌ 格式错误，请使用 /update 旧链接|新链接")
                     continue
 
                 url = extract_live_url(text[4:] if lower_text.startswith('/add') else text)
