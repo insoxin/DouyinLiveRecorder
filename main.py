@@ -75,6 +75,7 @@ rstr = r"[\/\\\:\*\？?\"\<\>\|&#.。,， ~！· ]"
 default_path = f'{script_path}/downloads'
 os.makedirs(default_path, exist_ok=True)
 file_update_lock = threading.Lock()
+telegram_bot_manage_lock = threading.Lock()
 telegram_bot_manage_started = False
 os_type = os.name
 clear_command = "cls" if os_type == 'nt' else "clear"
@@ -2017,11 +2018,13 @@ while True:
                            f"Exiting program due to the disk space limit being reached.")
             sys.exit(-1)
 
-    if tg_manage_urls and tg_token and tg_chat_id and not telegram_bot_manage_started:
-        t4 = threading.Thread(target=telegram_manage_live_urls, args=(tg_token, str(tg_chat_id)), daemon=True)
-        t4.start()
-        telegram_bot_manage_started = True
-        print("Telegram bot 链接管理已开启，发送 /help 查看命令")
+    if tg_manage_urls and tg_token and tg_chat_id:
+        with telegram_bot_manage_lock:
+            if not telegram_bot_manage_started:
+                telegram_bot_manage_started = True
+                t4 = threading.Thread(target=telegram_manage_live_urls, args=(tg_token, str(tg_chat_id)), daemon=True)
+                t4.start()
+                print("Telegram bot 链接管理已开启，发送 /help 查看命令")
 
 
     def contains_url(string: str) -> bool:
