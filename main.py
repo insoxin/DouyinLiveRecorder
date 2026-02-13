@@ -252,6 +252,30 @@ def list_live_urls() -> str:
     return '\n'.join(msg)
 
 
+def get_recording_status() -> str:
+    no_repeat_recording = list(set(recording))
+    msg = [f"📡 当前监测{monitoring}个直播"]
+    if not no_repeat_recording:
+        msg.append("🎬 当前无正在录制")
+        return '\n'.join(msg)
+    msg.append(f"🎬 正在录制{len(no_repeat_recording)}个直播")
+    now_time = datetime.datetime.now()
+    for recording_live in no_repeat_recording[:20]:
+        record_info = recording_time_list.get(recording_live)
+        if not record_info:
+            msg.append(f"✅ {recording_live}")
+            continue
+        try:
+            rt, qa = record_info
+            have_record_time = now_time - rt
+            msg.append(f"✅ {recording_live}[{qa}] {str(have_record_time).split('.', 1)[0]}")
+        except (ValueError, TypeError):
+            msg.append(f"✅ {recording_live}")
+    if len(no_repeat_recording) > 20:
+        msg.append("...（结果过长已截断）")
+    return '\n'.join(msg)
+
+
 def delete_live_url(url: str) -> str:
     with file_update_lock:
         if not os.path.isfile(url_config_file):
@@ -304,6 +328,7 @@ def telegram_manage_live_urls(token: str, chat_id: str):
         "Telegram录制链接管理命令：\n"
         "/add 链接 - 新增\n"
         "/list - 查询\n"
+        "/status - 录制状态\n"
         "/del 链接 - 删除\n"
         "/update 旧链接|新链接 - 修改\n"
         "也支持直接发送直播间链接进行新增。"
@@ -332,6 +357,10 @@ def telegram_manage_live_urls(token: str, chat_id: str):
 
                 if lower_text == '/list':
                     tg_bot(chat_id, token, list_live_urls())
+                    continue
+
+                if lower_text == '/status':
+                    tg_bot(chat_id, token, get_recording_status())
                     continue
 
                 if lower_text.startswith('/del ') or lower_text.startswith('/delete '):
