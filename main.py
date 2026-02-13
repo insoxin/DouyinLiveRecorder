@@ -262,11 +262,14 @@ def get_recording_status() -> str:
     now_time = datetime.datetime.now()
     for recording_live in no_repeat_recording[:20]:
         record_info = recording_time_list.get(recording_live)
-        if record_info and len(record_info) == 2:
+        if not record_info:
+            msg.append(f"✅ {recording_live}")
+            continue
+        try:
             rt, qa = record_info
             have_record_time = now_time - rt
-            msg.append(f"✅ {recording_live}[{qa}] {str(have_record_time).split('.')[0]}")
-        else:
+            msg.append(f"✅ {recording_live}[{qa}] {str(have_record_time).split('.', 1)[0]}")
+        except (ValueError, TypeError):
             msg.append(f"✅ {recording_live}")
     if len(no_repeat_recording) > 20:
         msg.append("...（结果过长已截断）")
