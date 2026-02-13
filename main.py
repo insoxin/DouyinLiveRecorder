@@ -242,7 +242,7 @@ def list_live_urls() -> str:
             enable_urls.append(live_url)
     if not enable_urls and not disable_urls:
         return "📭 暂无录制链接"
-    msg = [f"📋 录制链接（启用{len(enable_urls)} 停用{len(disable_urls)}）"]
+    msg = [f"📋 录制链接（启用{len(enable_urls)}个 停用{len(disable_urls)}个）"]
     if enable_urls:
         msg.extend([f"✅ {url}" for url in enable_urls[:40]])
     if disable_urls:
@@ -285,7 +285,10 @@ def update_live_url(old_url: str, new_url: str) -> str:
         updated = False
         for i, line in enumerate(lines):
             if parse_config_line_live_url(line) == old_url:
-                lines[i] = line.replace(old_url, new_url, 1)
+                for matched in re.finditer(r'https?://[^\s,，]+', line):
+                    if matched.group(0) == old_url:
+                        lines[i] = f"{line[:matched.start()]}{new_url}{line[matched.end():]}"
+                        break
                 updated = True
                 break
         if not updated:
