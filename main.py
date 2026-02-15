@@ -2060,7 +2060,7 @@ while True:
     dingtalk_phone_num = read_config_value(config, '推送配置', '钉钉通知@对象(填手机号)', "")
     dingtalk_is_atall = options.get(read_config_value(config, '推送配置', '钉钉通知@全体(是/否)', "否"), False)
     tg_token = read_config_value(config, '推送配置', 'tgapi令牌', "")
-    tg_chat_id = read_config_value(config, '推送配置', 'tg聊天id(个人或者群组id)', "")
+    tg_chat_id = read_config_value(config, '推送配置', 'tg管理员id(个人或者群组id)', "")
     tg_manage_urls = options.get(read_config_value(config, '推送配置', 'tg快捷管理录制地址(是/否)', "否"), False)
     email_host = read_config_value(config, '推送配置', 'SMTP邮件服务器', "")
     open_smtp_ssl = options.get(read_config_value(config, '推送配置', '是否使用SMTP服务SSL加密(是/否)', "是"), True)
