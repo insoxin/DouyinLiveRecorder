@@ -1,0 +1,509 @@
+# Instincts generated from https://github.com/insoxin/DouyinLiveRecorder
+# Generated: 2026-03-01T06:04:11.716Z
+# Version: 2.0
+
+---
+id: DouyinLiveRecorder-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: fix, feat, refactor, docs, chore
+
+## Evidence
+
+- 200 commits analyzed
+- Detected conventional commit pattern
+- Examples: chore: clarify telegram authorization variable naming, fix: accept telegram admin by chat or sender id
+
+---
+id: DouyinLiveRecorder-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Commit Length
+
+## Action
+
+Keep commit messages concise (under 50 characters)
+
+## Evidence
+
+- Average commit message length: 35 chars
+- Based on 200 commits
+
+---
+id: DouyinLiveRecorder-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Naming Files
+
+## Action
+
+Use snake_case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: snake_case
+
+---
+id: DouyinLiveRecorder-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Export Style
+
+## Action
+
+Prefer mixed exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: mixed
+
+---
+id: DouyinLiveRecorder-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: DouyinLiveRecorder-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~7x per month
+- Files: 
+
+---
+id: DouyinLiveRecorder-workflow-telegram-bot-feature-development
+trigger: "when doing telegram bot feature development"
+confidence: 0.65
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Workflow Telegram Bot Feature Development
+
+## Action
+
+Follow the telegram-bot-feature-development workflow:
+1. Implement command logic in main.py
+2. Update README.md with new command documentation
+3. Test and refine command behavior
+4. Create pull request
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~3x per month
+- Files: main.py, README.md, config/config.ini
+
+---
+id: DouyinLiveRecorder-workflow-spider-parsing-fixes
+trigger: "when doing spider parsing fixes"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Workflow Spider Parsing Fixes
+
+## Action
+
+Follow the spider-parsing-fixes workflow:
+1. Identify parsing issues
+2. Update regex patterns or API calls in spider.py
+3. Test with various URL formats
+4. Handle edge cases and error conditions
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: src/spider.py, main.py
+
+---
+id: DouyinLiveRecorder-workflow-main-py-fixes
+trigger: "when doing main py fixes"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Workflow Main Py Fixes
+
+## Action
+
+Follow the main-py-fixes workflow:
+1. Identify issue in main recording logic
+2. Implement fix in main.py
+3. Test recording functionality
+4. Deploy changes
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: main.py
+
+---
+id: DouyinLiveRecorder-workflow-copilot-assisted-development
+trigger: "when doing copilot assisted development"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/insoxin/DouyinLiveRecorder
+---
+
+# DouyinLiveRecorder Workflow Copilot Assisted Development
+
+## Action
+
+Follow the copilot-assisted-development workflow:
+1. Create initial plan commit
+2. Implement feature with Copilot assistance
+3. Create co-authored commits
+4. Merge via pull request
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: main.py, src/spider.py, README.md
+
+---
+id: douyinliverecorder-snake-case-files
+trigger: "When creating new Python files"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Snake Case Files
+
+## Action
+
+Use snake_case naming convention for file names
+
+## Evidence
+
+- Files like spider.py, main.py follow snake_case
+- Consistent pattern across all Python modules
+
+---
+id: douyinliverecorder-camel-case-functions
+trigger: "When defining new function names"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Camel Case Functions
+
+## Action
+
+Use camelCase for function naming
+
+## Evidence
+
+- Function naming pattern detected in codeStyle analysis
+- Mixed with some snake_case but camelCase is preferred
+
+---
+id: douyinliverecorder-pascal-case-classes
+trigger: "When creating new classes"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Pascal Case Classes
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Class naming convention identified in code analysis
+- Standard Python convention followed
+
+---
+id: douyinliverecorder-screaming-snake-constants
+trigger: "When defining constants"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Screaming Snake Constants
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Constants pattern in codeStyle analysis
+- Standard Python constant naming
+
+---
+id: douyinliverecorder-conventional-commits
+trigger: "When making a commit"
+confidence: 0.95
+domain: git
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Conventional Commits
+
+## Action
+
+Use conventional commit format with prefixes: fix, feat, refactor, docs, chore
+
+## Evidence
+
+- All example commits follow conventional format
+- Commits like 'feat: add telegram status command', 'fix: accept telegram admin by chat'
+
+---
+id: douyinliverecorder-short-commit-messages
+trigger: "When writing commit messages"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Short Commit Messages
+
+## Action
+
+Keep commit message length around 35 characters average
+
+## Evidence
+
+- Average commit length is 35 characters
+- Examples show concise messaging pattern
+
+---
+id: douyinliverecorder-try-catch-errors
+trigger: "When handling potential errors"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Try Catch Errors
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Error handling style identified as try-catch
+- No custom error classes detected
+
+---
+id: douyinliverecorder-telegram-bot-workflow
+trigger: "When adding new Telegram bot commands"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Telegram Bot Workflow
+
+## Action
+
+Implement in main.py, update README.md, test behavior, create PR
+
+## Evidence
+
+- Telegram bot workflow frequency: 3x/month
+- Files involved: main.py, README.md, config/config.ini
+
+---
+id: douyinliverecorder-spider-parsing-workflow
+trigger: "When platform APIs change or parsing fails"
+confidence: 0.88
+domain: workflow
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Spider Parsing Workflow
+
+## Action
+
+Update regex patterns in spider.py, test various URL formats, handle edge cases
+
+## Evidence
+
+- Spider parsing fixes workflow frequency: 4x/month
+- Files: src/spider.py, main.py
+
+---
+id: douyinliverecorder-core-fixes-workflow
+trigger: "When core recording logic has issues"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Core Fixes Workflow
+
+## Action
+
+Fix in main.py, test recording functionality thoroughly
+
+## Evidence
+
+- Main.py fixes workflow frequency: 6x/month
+- Single file focus on main.py
+
+---
+id: douyinliverecorder-copilot-workflow
+trigger: "When developing complex features with AI assistance"
+confidence: 0.92
+domain: workflow
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Copilot Workflow
+
+## Action
+
+Create initial plan commit, implement with Copilot, use co-authored commits, merge via PR
+
+## Evidence
+
+- Copilot workflow frequency: 5x/month
+- PR example: 'Merge pull request #8 from insoxin/copilot/fix-none-type-error'
+
+---
+id: douyinliverecorder-github-workflows
+trigger: "When setting up CI/CD"
+confidence: 0.9
+domain: architecture
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Github Workflows
+
+## Action
+
+Use .github/workflows directory with build-image.yml, issue-translator.yml, sync.yml
+
+## Evidence
+
+- Config files include .github/workflows/build-image.yml, issue-translator.yml, sync.yml
+- Standard GitHub Actions setup
+
+---
+id: douyinliverecorder-src-organization
+trigger: "When organizing code modules"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder Src Organization
+
+## Action
+
+Use src/ directory with http_clients and javascript subdirectories
+
+## Evidence
+
+- Folder structure shows srcLayout: http_clients, javascript
+- Single-package architecture type
+
+---
+id: douyinliverecorder-i18n-support
+trigger: "When adding internationalization"
+confidence: 0.75
+domain: architecture
+source: repo-analysis
+source_repo: insoxin/DouyinLiveRecorder
+---
+
+# Douyinliverecorder I18n Support
+
+## Action
+
+Use i18n/ directory for translation files
+
+## Evidence
+
+- Common folders include i18n
+- Suggests internationalization support
+
